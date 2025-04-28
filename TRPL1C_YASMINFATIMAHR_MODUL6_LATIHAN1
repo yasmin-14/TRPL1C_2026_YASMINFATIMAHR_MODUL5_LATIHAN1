@@ -1,0 +1,71 @@
+class CircularQueue {
+  List<int?> queue;
+  int size;
+  int front = -1;
+  int rear = -1;
+
+  CircularQueue(this.size) : queue = List<int?>.filled(size, null);
+
+  void enqueue(int data) {
+    if ((rear + 1) % size == front) {
+      print("Queue penuh!");
+      return;
+    }
+
+    if (front == -1) {
+      front = 0;
+      rear = 0;
+    } else {
+      rear = (rear + 1) % size;
+    }
+
+    queue[rear] = data;
+  }
+
+  void dequeue() {
+    if (front == -1) {
+      print("Queue kosong!");
+      return;
+    }
+
+    print("Data yang dikeluarkan: ${queue[front]}");
+    queue[front] = null;
+
+    if (front == rear) {
+      // Queue jadi kosong setelah dequeue
+      front = -1;
+      rear = -1;
+    } else {
+      front = (front + 1) % size;
+    }
+  }
+
+  void display() {
+    if (front == -1) {
+      print("Queue kosong!");
+      return;
+    }
+
+    print("Isi Queue:");
+    int i = front;
+    while (true) {
+      print(queue[i]);
+      if (i == rear) break;
+      i = (i + 1) % size;
+    }
+  }
+}
+
+void main() {
+  CircularQueue cq = CircularQueue(5);
+  cq.enqueue(10);
+  cq.enqueue(20);
+  cq.enqueue(30);
+  cq.enqueue(40);
+  cq.enqueue(50); // Queue penuh karena hanya 4 elemen bisa ditampung pada satu slot kosong
+  cq.display();
+
+  cq.dequeue();
+  cq.enqueue(60); // Sekarang bisa masuk setelah dequeue
+  cq.display();
+}
